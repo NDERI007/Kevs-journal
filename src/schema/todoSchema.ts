@@ -2,12 +2,19 @@
 import { z } from 'zod';
 import { Timestamp } from 'firebase/firestore';
 
-export const TodoSchema = z.object({
-  Title: z.string(), //required
-  Description: z.string().optional(), //not-required
-  completed: z.boolean().optional(),
-  id: z.string(), // You manually add this from doc.id
+// Define a task schema
+export const TaskSchema = z.object({
+  title: z.string(),
+  completed: z.boolean(),
+  description: z.string().optional(),
   DueDate: z.custom<Timestamp>((val) => val instanceof Timestamp), // Ensures it's a Firestore Timestamp
 });
 
-export type Todo = z.infer<typeof TodoSchema>; // Automatically creates the TypeScript type
+// Define a task group schema
+export const TaskGroupSchema = z.object({
+  name: z.string(),
+  tasks: z.array(TaskSchema),
+});
+
+export type Task = z.infer<typeof TaskSchema>;
+export type TaskGroup = z.infer<typeof TaskGroupSchema> & { id: string }; // Automatically creates the TypeScript type
