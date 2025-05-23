@@ -4,6 +4,7 @@ import { Timestamp } from 'firebase/firestore';
 
 // Define a task schema
 export const TaskSchema = z.object({
+  id: z.string(),
   title: z.string(),
   completed: z.boolean(),
   description: z.string().optional(),
