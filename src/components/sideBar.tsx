@@ -7,13 +7,19 @@ import {
   onSnapshot,
   arrayUnion,
 } from 'firebase/firestore';
+import { type User } from 'firebase/auth';
 import { type TaskGroup, TaskGroupSchema } from '../schema/todoSchema'; // Had to redefine the structure again because,
 //  TypeScript has no way of knowing what structure your Firestore documents have.
 import AddTaskDialog from './addTask';
-import { CheckCheck } from 'lucide-react';
+import { CheckCheck, LogOut } from 'lucide-react';
 import { format } from 'date-fns';
 
-const Sidebar = () => {
+type SidebarProps = {
+  user: User;
+  handleLogOut: () => void;
+};
+
+const Sidebar = ({ user, handleLogOut }: SidebarProps) => {
   const [groups, setGroups] = useState<TaskGroup[]>([]);
 
   const today = format(new Date(), 'EEE, dd MMM');
@@ -59,6 +65,13 @@ const Sidebar = () => {
       <h1 className="mb-4 text-xl font-bold">
         Todos <CheckCheck />
       </h1>
+      <button
+        onClick={handleLogOut}
+        className="flex cursor-pointer items-center gap-2"
+      >
+        <LogOut />
+        Logout
+      </button>
 
       {/* EXTRA SECTION: Date + Add Task */}
       <div className="border-t border-gray-700 pt-4">
