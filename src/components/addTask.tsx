@@ -7,7 +7,7 @@ import {
   TextField,
   MenuItem,
 } from '@mui/material';
-import { AddBox } from '@mui/icons-material';
+import { CirclePlus } from 'lucide-react';
 import { useState } from 'react';
 
 type Group = {
@@ -51,15 +51,10 @@ export default function AddTaskDialog({
 
   return (
     <>
-      <Button
-        onClick={handleOpen}
-        startIcon={<AddBox />}
-        variant="contained"
-        fullWidth
-        sx={{ mt: 2, bgcolor: '#7c3aed', '&:hover': { bgcolor: '#6d28d9' } }}
-      >
-        New Task
-      </Button>
+      <div onClick={handleOpen} className="flex items-center gap-2">
+        {' '}
+        <CirclePlus /> New task
+      </div>
 
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
         <DialogTitle>Add New Task</DialogTitle>

@@ -60,22 +60,34 @@ export default function AuthForm() {
         {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
 
         <form onSubmit={handleSubmit} className="mt-4 space-y-4">
-          <TextField
-            fullWidth
-            label="Email"
-            type="email"
-            variant="outlined"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <TextField
-            fullWidth
-            label="Password"
-            type="password"
-            variant="outlined"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className="flex flex-col space-y-4">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-white"
+            >
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              className="mt-1 w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-white"
+            >
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              className="mt-1 w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
           <Button type="submit" variant="contained" fullWidth>
             {mode === 'login' ? 'Login' : 'Create Account'}
           </Button>
@@ -97,7 +109,6 @@ export default function AuthForm() {
           }}
           fullWidth
           variant="outlined"
-          className="mt-4"
         >
           Sign in with Google
         </Button>

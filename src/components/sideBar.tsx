@@ -65,13 +65,32 @@ const Sidebar = ({ user, handleLogOut }: SidebarProps) => {
       <h1 className="mb-4 text-xl font-bold">
         Todos <CheckCheck />
       </h1>
-      <button
-        onClick={handleLogOut}
-        className="flex cursor-pointer items-center gap-2"
-      >
-        <LogOut />
-        Logout
-      </button>
+      <div className="flex items-center gap-2">
+        <AddTaskDialog
+          groups={groups}
+          onSubmit={async ({ title, description, dueDate, groupId }) => {
+            // Call Firebase add logic here
+            const groupRef = doc(DB, 'taskGroups', groupId);
+            const newTask = {
+              id: crypto.randomUUID(),
+              title,
+              description,
+              dueDate,
+              completed: false,
+            };
+            await updateDoc(groupRef, {
+              tasks: arrayUnion(newTask),
+            });
+          }}
+        />
+        <button
+          onClick={handleLogOut}
+          className="flex cursor-pointer items-center gap-2"
+        >
+          <LogOut size={'20'} />
+          Logout
+        </button>
+      </div>
 
       {/* EXTRA SECTION: Date + Add Task */}
       <div className="border-t border-gray-700 pt-4">
@@ -102,23 +121,6 @@ const Sidebar = ({ user, handleLogOut }: SidebarProps) => {
           </ul>
         </div>
       ))}
-      <AddTaskDialog
-        groups={groups}
-        onSubmit={async ({ title, description, dueDate, groupId }) => {
-          // Call Firebase add logic here
-          const groupRef = doc(DB, 'taskGroups', groupId);
-          const newTask = {
-            id: crypto.randomUUID(),
-            title,
-            description,
-            dueDate,
-            completed: false,
-          };
-          await updateDoc(groupRef, {
-            tasks: arrayUnion(newTask),
-          });
-        }}
-      />
     </div>
   );
 };

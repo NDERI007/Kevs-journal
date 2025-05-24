@@ -1,6 +1,7 @@
 import './index.css';
 import Sidebar from './components/sideBar';
 import AuthForm from './components/auth';
+import StickyWall from './stickyNotes/stickyWall';
 import { onAuthStateChanged, type User, signOut } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { authDomain } from './config/firebase';
@@ -34,6 +35,7 @@ function App() {
       {user ? (
         <>
           <Sidebar user={user} handleLogOut={handleLogout} />
+          <StickyWall />
         </>
       ) : (
         <AuthForm />
