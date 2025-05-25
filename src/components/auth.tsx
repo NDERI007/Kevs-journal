@@ -1,7 +1,6 @@
 // components/AuthForm.tsx
 import { useState } from 'react';
 import {
-  TextField,
   Button,
   ToggleButtonGroup,
   ToggleButton,

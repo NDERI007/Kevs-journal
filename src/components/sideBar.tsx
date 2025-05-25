@@ -20,15 +20,19 @@ type SidebarProps = {
 };
 
 const Sidebar = ({ user, handleLogOut }: SidebarProps) => {
-  const [groups, setGroups] = useState<TaskGroup[]>([]);
+  const [groups, setGroups] = useState<TaskGroup[]>([]); //groups is iniialized as a state var with an empty array of TaskGroup type
 
   const today = format(new Date(), 'EEE, dd MMM');
 
   useEffect(() => {
+    //useEffect here
+    //the subscription is the Firestore listener.
+    // The cleanup function (unsub) is crucial because it tells Firestore to stop listening when the component is removed. Without it, the subscription remains active unnecessarily.
     const unsub = onSnapshot(collection(DB, 'TODO'), (snapshot) => {
-      const data: TaskGroup[] = snapshot.docs
+      // onSnapshot sets up a real-time listener, so any changes to the 'TODO' collection will trigger the callback.
+      const data: TaskGroup[] = snapshot.docs //In the callback, snapshot.docs is an array of all the documents in the 'TODO' collection. They're mapping over each doc.
         .map((doc) => {
-          const parsed = TaskGroupSchema.safeParse(doc.data());
+          const parsed = TaskGroupSchema.safeParse(doc.data()); //Safe parse is probably from Zod, which validates the data structure
           if (!parsed.success) {
             console.error(`Invalid taskGroup in Firestore:`, parsed.error);
             return null;
@@ -37,13 +41,15 @@ const Sidebar = ({ user, handleLogOut }: SidebarProps) => {
         })
         .filter((g): g is TaskGroup => g !== null); // type guard
 
-      setGroups(data);
+      setGroups(data); //state is updated
     });
 
     return () => unsub();
-  }, []);
+  }, []); //The empty array [] ensures your Firestore listener is set up once (on mount) and cleaned up once (on unmount), making it perfect for persistent real-time subscriptions.
+  // React component "mounts," refers to the moment it's first rendered and added to the DOM. This is a key lifecycle moment in React, and it's when the component becomes visible in the UI.
 
   const toggleTask = async (groupId: string, taskId: string) => {
+    //Since it's an async function, it awaits the Firestore update.
     const groupRef = doc(DB, 'TODO', groupId);
     const group = groups.find((g) => g.id === groupId);
 
@@ -53,8 +59,9 @@ const Sidebar = ({ user, handleLogOut }: SidebarProps) => {
       return;
     }
 
-    const updatedTasks = group.tasks.map((task) =>
-      task.id === taskId ? { ...task, completed: !task.completed } : task,
+    const updatedTasks = group.tasks.map(
+      (task) =>
+        task.id === taskId ? { ...task, completed: !task.completed } : task, //We use the spread operator { ...task } to create a new object rather than modifying the original task directly
     );
 
     await updateDoc(groupRef, { tasks: updatedTasks });

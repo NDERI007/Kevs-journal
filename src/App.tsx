@@ -34,8 +34,10 @@ function App() {
     <div>
       {user ? (
         <>
-          <Sidebar user={user} handleLogOut={handleLogout} />
-          <StickyWall />
+          <div>
+            <Sidebar user={user} handleLogOut={handleLogout} />
+            <StickyWall />
+          </div>
         </>
       ) : (
         <AuthForm />
